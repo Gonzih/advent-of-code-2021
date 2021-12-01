@@ -7,7 +7,6 @@ def first_part():
             v = int(line)
             if prev and prev < v:
                 counter += 1
-                print(v)
             prev = v
 
     return counter
@@ -33,10 +32,7 @@ def second_part():
         if i > 0 and sums[i-1] < sums[i]:
             counter += 1
 
-    print(f"# of numbers {len(numbers)}")
-    print(f"# of windows {len(windows)}")
-    print(f"# of sums {len(sums)}")
-    print(f"Answer is {counter}")
+    return counter
 
 
 answer1 = first_part()
