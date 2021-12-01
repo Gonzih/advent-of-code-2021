@@ -14,7 +14,6 @@ def first_part():
 
 def second_part():
     numbers = []
-    windows = []
     sums = []
     counter = 0
 
@@ -25,7 +24,6 @@ def second_part():
 
     for i in range(len(numbers)-2):
         window = [numbers[i], numbers[i+1], numbers[i+2]]
-        windows.append(window)
         sums.append(sum(window))
 
     for i in range(len(sums)):
