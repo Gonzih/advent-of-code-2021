@@ -33,6 +33,7 @@ def second_part():
     return counter
 
 
+print("Day 1")
 answer1 = first_part()
 answer2 = second_part()
 print(f"First answer is {answer1}")

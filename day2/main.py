@@ -41,14 +41,17 @@ class Sub:
 
 
 def run():
+    print("Day 2")
+
     sub1 = Sub()
     sub2 = Sub()
+
     with open("input.txt") as input:
         for line in input:
             inst = Instruction(line.strip())
             sub1.apply_first(inst)
             sub2.apply_second(inst)
-            print(inst)
+
     print(f"First answer: {sub1.answer()}")
     print(f"Second answer: {sub2.answer()}")
 
