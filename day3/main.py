@@ -5,45 +5,48 @@ def to_dec(binstr: str) -> int:
     return int(f"0b{binstr}", 2)
 
 
-def filter_by_pos(lines: List[str], pos: int, char: str):
-    return list(filter(lambda line: line[pos] == char, lines))
+def join_bits(bits: List[str]) -> str:
+    return "".join(bits)
 
 
-class Report:
-    def __init__(self):
-        self.gamma_rate = 0
-        self.epsilon_rate = 0
-        self.oxygen_rating = 0
-        self.co2_rating = 0
-        self.lines = []
+class Dataset:
+    def __init__(self, input: List[str]):
+        self.input = input
         self.ones = []
         self.zeros = []
         self.most_commons = []
         self.least_commons = []
-        self.allocated = False
-        self.len = 0
+        self.allocate()
+        self.process()
+        self.calculate()
 
-    def allocate(self, n):
-        for _ in range(n):
+    def allocate(self):
+        for _ in range(self.line_len()):
             self.ones.append(0)
             self.zeros.append(0)
-        self.allocated = True
-        self.len = n
+
+    def process(self):
+        for line in self.input:
+            self.process_line(line)
+
+    def line_len(self):
+        if len(self.input) == 0:
+            return 0
+        else:
+            return len(self.input[0])
+
+    def len(self):
+        return len(self.input)
 
     def process_line(self, line: str):
-        self.lines.append(line)
-
-        if not self.allocated:
-            self.allocate(len(line))
-
         for i, c in enumerate(line):
             if c == '0':
                 self.zeros[i] += 1
             elif c == '1':
                 self.ones[i] += 1
 
-    def calutate_power_consumption(self):
-        for i in range(self.len):
+    def calculate(self):
+        for i in range(self.line_len()):
             most_common = ''
             least_common = ''
 
@@ -57,27 +60,47 @@ class Report:
             self.most_commons.append(most_common)
             self.least_commons.append(least_common)
 
-        self.gamma_rate = to_dec("".join(self.most_commons))
-        self.epsilon_rate = to_dec("".join(self.least_commons))
+    def filter_by_pos(self, lines: List[str], pos: int, char: str):
+        return Dataset(
+            list(
+                filter(
+                    lambda line: line[pos] == char,
+                    self.input)))
+
+
+class Report:
+    def __init__(self):
+        self.gamma_rate = 0
+        self.epsilon_rate = 0
+        self.oxygen_rating = 0
+        self.co2_rating = 0
+        self.dataset = Dataset([])
+        self.allocated = False
+
+    def process_input(self, lines: List[str]):
+        self.dataset = Dataset(lines)
+
+    def calutate_power_consumption(self):
+        self.gamma_rate = to_dec(join_bits(self.dataset.most_commons))
+        self.epsilon_rate = to_dec(join_bits(self.dataset.least_commons))
 
     def calculate_life_support_rating(self):
-        oxygen_ratings = self.lines
-        co2_ratings = self.lines
+        oxygen_ratings = self.dataset
+        co2_ratings = self.dataset
 
-        for i in range(self.len):
-            most = self.most_commons[i]
-            least = self.least_commons[i]
+        for i in range(self.dataset.line_len()):
+            most = oxygen_ratings.most_commons[i]
+            least = co2_ratings.least_commons[i]
 
-            if len(oxygen_ratings) > 1:
-                oxygen_ratings = filter_by_pos(oxygen_ratings, i, most)
-            if len(co2_ratings) > 1:
-                co2_ratings = filter_by_pos(co2_ratings, i, least)
+            if oxygen_ratings.len() > 1:
+                oxygen_ratings = oxygen_ratings.\
+                    filter_by_pos(oxygen_ratings, i, most)
+            if co2_ratings.len() > 1:
+                co2_ratings = co2_ratings.\
+                    filter_by_pos(co2_ratings, i, least)
 
-            print(
-                f"Reduced oxy to {len(oxygen_ratings)}, co2 {len(co2_ratings)}")
-
-        self.oxygen_rating = to_dec("".join(oxygen_ratings[0]))
-        self.co2_rating = to_dec("".join(co2_ratings[0]))
+        self.oxygen_rating = to_dec(join_bits(oxygen_ratings.input[0]))
+        self.co2_rating = to_dec(join_bits(co2_ratings.input[0]))
 
     def calculate(self):
         self.calutate_power_consumption()
@@ -94,10 +117,8 @@ def run():
     report = Report()
 
     with open('input.txt') as input:
-        for line in input:
-            binstr = line.strip()
-            print(binstr)
-            report.process_line(binstr)
+        lines = [line.strip() for line in input]
+        report.process_input(lines)
 
     report.calculate()
     print(f"First answer {report.first_answer()}")
