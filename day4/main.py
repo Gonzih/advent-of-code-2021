@@ -12,6 +12,7 @@ def green_color(s: str) -> str:
 class Board:
     def __init__(self):
         self.numbers: Set[int] = set()
+        self.last_number: int = -1
         self.print_rows: List[List[int]] = []
         self.rows: List[Set[int]] = []
         self.cols: List[Set[int]] = []
@@ -41,8 +42,9 @@ class Board:
             [" ".join([self.__display_n__(n) for n in row])
              for row in self.print_rows])
 
-    def set_numbers(self, numbers: Set[int]):
-        self.numbers = numbers.copy()
+    def add_number(self, n: int):
+        self.numbers.add(n)
+        self.last_number = n
 
     def is_winner(self):
         for i in range(BOARD_SIZE):
@@ -57,10 +59,13 @@ class Board:
 
         for row in self.rows:
             for n in row:
-                if not n in self.numbers:
+                if n not in self.numbers:
                     result += n
 
         return result
+
+    def score(self) -> int:
+        return self.unmarked_sum() * self.last_number
 
 
 class Bingo:
@@ -71,42 +76,36 @@ class Bingo:
     def add_board(self, board: Board):
         self.boards.append(board)
 
-    def print_board(self, board: Board, n: int):
+    def print_board(self, board: Board):
         print(board)
-        print(f"\nfor set {board.numbers}\nwinning number: {n}")
-        score = board.unmarked_sum() * n
-        print(f"\nFinal score: {score}\n")
+        print(
+            f"\nfor set {board.numbers}\nwinning number: {board.last_number}")
+        print(f"\nFinal score: {board.score()}\n")
 
     def play(self):
-        numbers_set = set()
         first_board = None
-        first_number = None
         last_board = None
-        last_number = None
 
         for n in self.numbers:
-            numbers_set.add(n)
             for board in self.boards:
                 if not board.is_winner():
-                    board.set_numbers(numbers_set)
+                    board.add_number(n)
 
                 if not last_board and\
                         all(board.is_winner() for board in self.boards):
                     last_board = board
-                    last_number = n
 
             if not first_board:
                 winners = list(
                     filter(lambda board: board.is_winner(), self.boards))
                 if len(winners) == 1:
                     first_board = winners[0]
-                    first_number = n
 
         print("First winning board:\n")
-        self.print_board(first_board, first_number)
+        self.print_board(first_board)
 
         print("Last winning board:\n")
-        self.print_board(last_board, last_number)
+        self.print_board(last_board)
 
 
 def run():
