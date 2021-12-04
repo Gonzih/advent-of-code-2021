@@ -1,12 +1,12 @@
 from typing import List, Set
 
 BOARD_SIZE = 5
-RED = '\033[0;32m'
+GREEN = '\033[0;32m'
 NC = '\033[0m'
 
 
 def green_color(s: str) -> str:
-    return f"{RED}{s}{NC}"
+    return f"{GREEN}{s}{NC}"
 
 
 class Board:
