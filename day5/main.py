@@ -2,7 +2,7 @@ import typing
 
 
 def run():
-    print("Day 4")
+    print("Day 3")
 
 
 run()
