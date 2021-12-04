@@ -42,7 +42,7 @@ class Board:
              for row in self.print_rows])
 
     def set_numbers(self, numbers: Set[int]):
-        self.numbers = numbers
+        self.numbers = numbers.copy()
 
     def is_winner(self):
         for i in range(BOARD_SIZE):
@@ -88,7 +88,7 @@ class Bingo:
             numbers_set.add(n)
             for board in self.boards:
                 if not board.is_winner():
-                    board.set_numbers(numbers_set.copy())
+                    board.set_numbers(numbers_set)
 
                 if not last_board and\
                         all(board.is_winner() for board in self.boards):
