@@ -54,8 +54,11 @@ class Line:
         self.start = Vec2(coords[0][0], coords[0][1])
         self.end = Vec2(coords[1][0], coords[1][1])
 
-    def plot(self) -> List[Vec2]:
+    def plot(self,) -> List[Vec2]:
         direction = (self.start - self.end).to_direction().invert()
+        # Part one only
+        # if not (direction.x == 0 or direction.y == 0):
+        #     return []
 
         points = []
         point = self.start
