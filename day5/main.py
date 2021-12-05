@@ -63,7 +63,6 @@ class Line:
         points = []
         point = self.start
         while True:
-            # print(f"loop {point} + {direction}, {self}")
             points.append(point)
             if point == self.end:
                 break
