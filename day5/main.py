@@ -10,7 +10,7 @@ class Vec2:
     def __repr__(self) -> str:
         return f"({self.x}, {self.y})"
 
-    def __eq__(self, other: Vec2):
+    def __eq__(self, other: object):
         if isinstance(other, Vec2):
             return self.x == other.x and self.y == other.y
         return False

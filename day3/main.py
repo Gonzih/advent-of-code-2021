@@ -12,10 +12,10 @@ def join_bits(bits: List[str]) -> str:
 class Dataset:
     def __init__(self, input: List[str]):
         self.input = input
-        self.ones = []
-        self.zeros = []
-        self.most_commons = []
-        self.least_commons = []
+        self.ones: List[int] = []
+        self.zeros: List[int] = []
+        self.most_commons: List[int] = []
+        self.least_commons: List[int] = []
         self.allocate()
         self.process()
         self.calculate()

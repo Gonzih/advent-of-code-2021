@@ -18,23 +18,21 @@ class Sub:
         self.horizontal = 0
 
     def apply_first(self, inst: Instruction):
-        match inst.direction:
-            case "forward":
-                self.horizontal += inst.value
-            case "up":
-                self.depth -= inst.value
-            case "down":
-                self.depth += inst.value
+        if inst.direction == "forward":
+            self.horizontal += inst.value
+        elif inst.direction == "up":
+            self.depth -= inst.value
+        elif inst.direction == "down":
+            self.depth += inst.value
 
     def apply_second(self, inst: Instruction):
-        match inst.direction:
-            case "forward":
-                self.horizontal += inst.value
-                self.depth += self.aim * inst.value
-            case "up":
-                self.aim -= inst.value
-            case "down":
-                self.aim += inst.value
+        if inst.direction == "forward":
+            self.horizontal += inst.value
+            self.depth += self.aim * inst.value
+        elif inst.direction == "up":
+            self.aim -= inst.value
+        elif inst.direction == "down":
+            self.aim += inst.value
 
     def answer(self):
         return self.depth * self.horizontal

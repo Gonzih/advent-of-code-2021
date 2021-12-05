@@ -3,7 +3,7 @@ TASKS = $(patsubst %,day%,$(DAYS))
 
 .PHONY: all $(TASKS)
 $(TASKS):
-	cd $@ && python3.10 main.py
+	cd $@ && mypy main.py && python3.10 main.py
 all: $(TASKS)
 
 deps:
