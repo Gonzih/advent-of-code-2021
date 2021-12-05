@@ -56,8 +56,6 @@ class Line:
 
     def plot(self) -> List[Vec2]:
         direction = (self.start - self.end).to_direction().invert()
-        if not self.start.x == self.end.x and not self.start.y == self.end.y:
-            return []
 
         points = []
         point = self.start
