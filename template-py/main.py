@@ -2,7 +2,10 @@ import typing
 
 
 def run():
-    print("Day 3")
+    with open('input.txt') as input:
+        for line in input:
+            print(line)
+    print("Day x")
 
 
 run()
