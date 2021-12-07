@@ -1,16 +1,18 @@
 from typing import List
+import statistics
 
 
 def min_distance_one(numbers: List[int]) -> int:
-    max_n = max(numbers)
-    distances = [sum([abs(i-j) for j in numbers]) for i in range(max_n)]
+    avg = round(sum(numbers)/len(numbers))
+    distances = [sum([abs(i-j) for j in numbers])
+                 for i in range(avg)]
     return min(distances)
 
 
 def min_distance_two(numbers: List[int]) -> int:
-    max_n = max(numbers)
+    avg = round(sum(numbers)/len(numbers))
     distances = [sum([sum(range(abs(i-j)+1)) for j in numbers])
-                 for i in range(max_n)]
+                 for i in range(avg)]
     return min(distances)
 
 
