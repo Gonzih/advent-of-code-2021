@@ -9,7 +9,7 @@ def min_distance_one(numbers: List[int]) -> int:
 
 def min_distance_two(numbers: List[int]) -> int:
     max_n = max(numbers)
-    distances = [sum([sum(range(abs(i-j))) for j in numbers])
+    distances = [sum([sum(range(abs(i-j)+1)) for j in numbers])
                  for i in range(max_n)]
     return min(distances)
 
