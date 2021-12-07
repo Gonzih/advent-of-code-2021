@@ -5,14 +5,14 @@ import statistics
 def min_distance_one(numbers: List[int]) -> int:
     avg = round(sum(numbers)/len(numbers))
     distances = [sum([abs(i-j) for j in numbers])
-                 for i in range(avg)]
+                 for i in range(int(avg/2), avg)]
     return min(distances)
 
 
 def min_distance_two(numbers: List[int]) -> int:
     avg = round(sum(numbers)/len(numbers))
     distances = [sum([sum(range(abs(i-j)+1)) for j in numbers])
-                 for i in range(avg)]
+                 for i in range(int(avg/2), avg)]
     return min(distances)
 
 
