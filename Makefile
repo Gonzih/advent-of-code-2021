@@ -1,4 +1,4 @@
-DAYS = $(shell seq 1 1 7)
+DAYS = $(shell seq 1 1 8)
 TASKS = $(patsubst %,day%,$(DAYS))
 
 .PHONY: all $(TASKS)
