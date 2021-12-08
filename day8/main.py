@@ -30,7 +30,7 @@ class Digit:
         return f"{self.segment}({self.to_dec()})"
 
     def contains(self, other: Digit) -> bool:
-        return all(s in self.segment for s in other.segment)
+        return set(other.segment).issubset(set(self.segment))
 
     def equal(self, other: Digit) -> bool:
         return self.contains(other) and self.len() == other.len()
@@ -97,6 +97,7 @@ def run():
     print(count)
     assert(count == 512)
     print(sumsum)
+    assert(sumsum == 1091165)
 
 
 run()
