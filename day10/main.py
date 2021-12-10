@@ -125,6 +125,8 @@ tescore, tcscore = run('test-input.txt')
 assert(tescore == 26397)
 assert(tcscore == 288957)
 
+print("")
+
 escore, cscore = run('input.txt')
 assert(escore == 240123)
 assert(cscore == 3260812321)
