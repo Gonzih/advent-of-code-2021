@@ -93,8 +93,7 @@ def run(fname) -> tuple[int, int]:
             _score *= 5
             opener = chunk.state.pop()
             closer = chunk_mapping[opener]
-            addition = COMPLETE_SCORE_TABLE[closer]
-            _score += addition
+            _score += COMPLETE_SCORE_TABLE[closer]
         cscores.append(_score)
     cscores.sort(reverse=True)
     cscore = cscores[len(cscores)//2]
