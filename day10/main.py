@@ -21,25 +21,12 @@ def chunkers() -> dict[str, str]:
     return chunks
 
 
-def empty_state() -> dict[str, int]:
-    state = {}
-    for s in OPENING:
-        state[s] = 0
-    return state
-
-
 class Chunk:
     def __init__(self, line: str):
         self.line = line.strip()
         self.state: list[str] = []
         self.error_char: Optional[str] = None
         self.error_idx: Optional[int] = None
-
-    # def state_valid(self) -> bool:
-    #     for k in self.state:
-    #         if self.state[k] < 0:
-    #             return False
-    #     return True
 
     def parse(self) -> Optional[str]:
         chunk_mapping = chunkers()
