@@ -16,3 +16,4 @@ deps:
 	sudo pip3 install mypy
 	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs > /tmp/installer.sh
 	sh /tmp/installer.sh -y
+	rustup default nightly
