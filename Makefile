@@ -14,3 +14,4 @@ deps:
 	sudo add-apt-repository -y ppa:deadsnakes/ppa
 	sudo apt install -y python3.10 python3-pip
 	sudo pip3 install mypy
+	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
