@@ -1,10 +1,14 @@
-DAYS = $(shell seq 1 1 10)
-TASKS = $(patsubst %,day%,$(DAYS))
+PY_DAYS = $(shell seq 1 1 10)
+RS_DAYS = $(shell seq 11 1 11)
+PY_TASKS = $(patsubst %,day%,$(PY_DAYS))
+RS_TASKS = $(patsubst %,day%,$(RS_DAYS))
 
-.PHONY: all $(TASKS)
-$(TASKS):
+.PHONY: all $(PY_TASKS) $(RS_TASKS)
+$(PY_TASKS):
 	cd $@ && mypy main.py && python3.10 main.py
-all: $(TASKS)
+$(RS_TASKS):
+	cd $@ && cargo run
+all: $(PY_TASKS) $(RS_TASKS)
 
 deps:
 	sudo add-apt-repository -y ppa:deadsnakes/ppa
