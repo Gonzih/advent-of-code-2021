@@ -17,8 +17,8 @@ impl Vec2 {
         let y = i / width;
         let x = i % width;
         Vec2 {
-            x: x.try_into().unwrap(),
-            y: y.try_into().unwrap(),
+            x: x as i32,
+            y: y as i32,
         }
     }
 }
@@ -30,16 +30,16 @@ impl Vec2 {
     }
 
     fn neighbours(&self, width: usize, height: usize) -> Vec<Vec2> {
-        let w: i32 = width.try_into().unwrap();
-        let h: i32 = height.try_into().unwrap();
+        let w = width as i32;
+        let h = height as i32;
         let offsets = [-1, 0, 1];
         let mut neighbours: Vec<Vec2> = vec![];
 
         for i in offsets {
             for j in offsets {
                 if !(i == 0 && j == 0) {
-                    let ii: i32 = i.try_into().unwrap();
-                    let jj: i32 = j.try_into().unwrap();
+                    let ii = i as i32;
+                    let jj = j as i32;
                     neighbours.push(Vec2::new(ii, jj));
                 }
             }
@@ -53,8 +53,8 @@ impl Vec2 {
     }
 
     fn to_offset(&self, width: usize) -> usize {
-        let w: i32 = width.try_into().unwrap();
-        (self.y * w + self.x).try_into().unwrap()
+        let w = width as i32;
+        (self.y * w + self.x) as usize
     }
 }
 
@@ -210,14 +210,14 @@ impl Game {
             .map(|c| c.join(""))
             .collect::<Vec<String>>()
             .join("\n");
-        println!("{}", s)
+
+        println!("{}", s);
     }
 
     fn simulate(&mut self) {
         for i in 0..100 {
             println!("#{}", i + 1);
             self.tick();
-            // game.print();
         }
         println!("Total flashes after 100: {}", self.flashes);
 
@@ -232,15 +232,16 @@ impl Game {
 }
 
 fn run(input: &str) -> Result<usize> {
-    let octopusses: Result<Vec<Vec<Octopus>>> = input
+    let octopusses = input
         .lines()
         .map(|line| {
-            let row: Result<Vec<Octopus>> = line.chars().map(|c| Octopus::from_char(c)).collect();
-            row
+            line.chars()
+                .map(|c| Octopus::from_char(c))
+                .collect::<Result<Vec<Octopus>>>()
         })
-        .collect();
+        .collect::<Result<Vec<Vec<Octopus>>>>()?;
 
-    let mut game = Game::new(octopusses?);
+    let mut game = Game::new(octopusses);
     game.simulate();
 
     Ok(game.flashes)
