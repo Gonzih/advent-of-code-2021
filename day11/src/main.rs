@@ -102,7 +102,10 @@ impl Octopus {
 impl Octopus {
     fn flash(&mut self) -> bool {
         let should_flash = !self.flashed && self.energy > 9;
-        self.flashed = should_flash;
+        if should_flash {
+            self.flashed = true;
+        }
+
         should_flash
     }
 
