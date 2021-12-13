@@ -58,64 +58,28 @@ impl Graph {
         }
     }
 
-    fn walk(&self, from: Node, to: Node) -> Vec<Vec<Node>> {
-        let init_paths: Vec<Path> = vec![vec![from]];
-        let mut paths_cache: Vec<Path> = init_paths.clone();
-        let mut paths: Vec<Path> = vec![];
-        let mut paths_log: Vec<Path> = init_paths.clone();
+    fn walk(&self, from: Node, to: Node, visited: Path, can_visit_twice: bool) -> usize {
+        let mut counter: usize = 0;
 
-        loop {
-            println!("Paths cache {:?}", paths_cache);
-            println!("Paths log {:?}", paths_log);
-            println!("Paths state {:?}\n", paths);
-
-            if paths_log.len() == 0 {
-                break;
+        self.edges.iter().filter(|e| e.from == from).for_each(|e| {
+            if e.to == to {
+                counter += 1;
+            } else if e.to.to_uppercase() == e.to {
+                counter += self.walk(e.to.clone(), to.clone(), visited.clone(), can_visit_twice);
+            } else if !visited.contains(&e.to) {
+                let mut new_visited = visited.clone();
+                new_visited.push(e.to.clone());
+                counter += self.walk(e.to.clone(), to.clone(), new_visited, can_visit_twice);
+            } else if e.to != "start".to_string() && can_visit_twice {
+                counter += self.walk(e.to.clone(), to.clone(), visited.clone(), false);
             }
+        });
 
-            let current_path = paths_log.remove(0);
-            let current_end: Node = current_path.last().unwrap().clone();
-
-            let edges_from_this: Vec<&Edge> = self
-                .edges
-                .iter()
-                .filter(|e| e.from == current_end)
-                .collect();
-
-            edges_from_this.iter().for_each(|e| {
-                let mut new_path = current_path.to_owned();
-                new_path.push(e.to.clone());
-
-                if !paths_cache.contains(&new_path) {
-                    paths_log.push(new_path.clone());
-                    paths_cache.push(new_path);
-                }
-            });
-
-            paths_log
-                .iter()
-                .filter(|path| path_ends_with(path, to.clone()))
-                .for_each(|path| {
-                    let mut p: Path = path.clone();
-                    p.push(to.clone());
-                    paths.push(p);
-                });
-
-            paths_log = paths_log
-                .into_iter()
-                .filter(|path| !path_ends_with(path, to.clone()))
-                .collect::<Vec<_>>();
-        }
-
-        paths
+        counter
     }
 
-    fn possible_paths(&self, from: Node, to: Node) -> Vec<Vec<Node>> {
-        let paths = self.walk(from.clone(), to.clone());
-
-        println!("Paths {:?}", paths);
-
-        paths
+    fn possible_paths(&self, from: Node, to: Node, can_visit_twice: bool) -> usize {
+        self.walk(from.clone(), to.clone(), vec![from], can_visit_twice)
     }
 }
 
@@ -132,8 +96,10 @@ fn run(input: &'static str) -> Result<()> {
 
     println!("{:?}", graph);
 
-    let paths = graph.possible_paths("start".to_string(), "end".to_string());
-    println!("Possible paths {:?}", paths);
+    let p1 = graph.possible_paths("start".to_string(), "end".to_string(), false);
+    println!("Part one {:?}", p1);
+    let p2 = graph.possible_paths("start".to_string(), "end".to_string(), true);
+    println!("Part two {:?}", p2);
 
     Ok(())
 }
@@ -143,7 +109,7 @@ fn main() -> Result<()> {
     let input = include_str!("input.txt");
 
     run(test_input)?;
-    // run(input)?;
+    run(input)?;
 
     Ok(())
 }
