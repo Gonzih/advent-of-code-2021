@@ -33,7 +33,6 @@ impl Polymer {
     }
 
     fn tick(&mut self) {
-        let mut new_polymer = self.current.clone();
         self.current
             .chars()
             .collect::<Vec<char>>()
@@ -44,10 +43,9 @@ impl Polymer {
             .for_each(|(i, s)| {
                 if let Some(ns) = self.vocab.get(&s) {
                     let p = i + 1;
-                    new_polymer.insert_str(p, ns);
+                    self.current.insert_str(p, ns);
                 }
             });
-        self.current = new_polymer;
     }
 
     fn count(&self) -> usize {
