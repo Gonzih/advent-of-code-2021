@@ -49,7 +49,7 @@ impl Polymer {
     }
 
     fn count(&self) -> usize {
-        println!("Template: {}", self.current);
+        // println!("Template: {}", self.current);
         println!("Len {}", self.current.len());
 
         let mut counter: HashMap<char, usize> = HashMap::new();
@@ -73,7 +73,6 @@ impl Polymer {
 fn run(input: &'static str, steps: usize) -> usize {
     let mut polymer = Polymer::new();
     input.lines().for_each(|line| polymer.process(line));
-    println!("{:?}", polymer);
     for _ in 0..steps {
         polymer.tick();
     }
