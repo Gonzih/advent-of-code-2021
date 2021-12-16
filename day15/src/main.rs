@@ -107,7 +107,7 @@ impl Path {
 
     fn neighbours(&self, point: Point) -> Vec<Node> {
         let (ox, oy) = point;
-        let points: Vec<(i32, i32)> = vec![(1, 0), (0, 1), (-1, 0), (0, -1)];
+        let points: Vec<(i32, i32)> = vec![(1, 0), (0, 1)];
 
         let mut result = vec![];
 
@@ -127,7 +127,7 @@ impl Path {
         result
     }
 
-    fn print(&self, tp: &'static str) {
+    fn print(&self) {
         println!();
         for x in 0..(self.width()) {
             println!();
@@ -137,15 +137,7 @@ impl Path {
                 if p.unexplored {
                     color = NC;
                 }
-                let mut v = p.cost;
-
-                // if tp == "cache" {
-                //     v = p.total_cost;
-                //     if v == std::usize::MAX {
-                //         v = 0
-                //     }
-                // }
-                print!("{}{}{}", color, v, NC)
+                print!("{}{}{}", color, p.cost, NC)
             }
         }
         println!();
@@ -170,19 +162,15 @@ impl Path {
         }
 
         nodes.sort_by_key(|p| p.total_cost);
-        // println!("{:?}", nodes);
         nodes.first().unwrap().to_owned()
     }
 
     fn cheapest_path(&mut self, start: Point, end: Point) -> usize {
         self.reset_cache(start);
 
-        // let (end_x, end_y) = end;
         let mut current: Node = self.field[start.0][start.1].clone();
 
         while self.still_unexplored() {
-            // println!();
-            // println!("Current {:?}", current);
             if current.pos == end {
                 break;
             }
@@ -200,13 +188,7 @@ impl Path {
             });
 
             current = self.next_unexplored_node();
-            // println!("Current {:?}", current);
-            // self.print("field");
-            // self.print("cache");
         }
-
-        // println!();
-        // println!("{:?}", current);
 
         current.total_cost - self.field[start.0][start.1].cost
     }
@@ -217,9 +199,7 @@ fn run(input: &'static str, v: usize) {
     input.lines().for_each(|line| p.process(line));
     p.expand_map();
     p.reset_cache((0, 0));
-    // p.print("field");
     let cheapest = p.cheapest_path((0, 0), (p.width() - 1, p.height() - 1));
-    // p.print("cache");
     println!("Cheapest path {}", cheapest);
     assert_eq!(cheapest, v);
 }
