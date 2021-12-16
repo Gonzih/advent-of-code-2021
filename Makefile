@@ -23,6 +23,6 @@ deps:
 	sh /tmp/installer.sh -y
 	rustup default nightly
 	cd /tmp && wget https://golang.org/dl/go$(GO_VERSION).linux-amd64.tar.gz
-	sudo tar -C /usr/local -xzf /tmp/go1.$(GO_VERSION).linux-amd64.tar.gz
+	sudo tar -C /usr/local -xzf /tmp/go$(GO_VERSION).linux-amd64.tar.gz
 	sudo ln -sf /usr/local/go/bin/go /usr/bin/go
 	go version
