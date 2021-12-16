@@ -43,7 +43,6 @@ func decode(ln string) string {
 
 	for _, c := range ln {
 		s := string(c)
-		fmt.Print(s)
 		decoded += vocab[s]
 	}
 
@@ -54,34 +53,105 @@ type packet struct {
 	line string
 }
 
+func (p *packet) read_rest_str(start int) string {
+	return p.line[start:]
+}
+
+func (p *packet) read_str(start int, leng int) string {
+	return p.line[start:(start + leng)]
+}
+
+func (p *packet) read(start int, leng int) int {
+	return bin2dig(p.read_str(start, leng))
+}
 func (p *packet) version() int {
-	return bin2dig(p.line[0:3])
+	return p.read(0, 3)
 }
 
 func (p *packet) id() int {
-	return bin2dig(p.line[3:6])
+	return p.read(3, 3)
 }
 
 func (p *packet) ltid() int {
-	return bin2dig(p.line[7:8])
+	return p.read(6, 1)
 }
 
-func (p *packet) len() int {
-	return bin2dig(p.line[8:22])
+func (p *packet) payloadLen() int {
+	return p.read(7, 15)
 }
 
-func (p *packet) val() int {
-	s := ""
-	fmt.Println()
-	if p.id() == 4 {
-		s += p.line[7:11]
-		fmt.Println(s)
-		s += p.line[12:16]
-		fmt.Println(s)
-		s += p.line[17:21]
+func (p *packet) payloadCount() int {
+	return p.read(7, 11)
+}
+
+func (p *packet) sumVersions() int {
+	sum := p.version()
+	for _, pckt := range p.subPackets() {
+		sum += pckt.sumVersions()
 	}
-	fmt.Println(s)
-	return bin2dig(s)
+	return sum
+}
+
+func (p *packet) subPackets() []packet {
+	var res []packet = make([]packet, 0)
+	if p.id() == 4 {
+		return res
+	}
+
+	takeCount := p.ltid() == 1
+	readLen := 0
+	readCount := 0
+
+	if !takeCount {
+		payload := p.read_str(22, p.payloadLen())
+		expectedLen := p.payloadLen()
+		for {
+			ln := payload[readLen:]
+			pckt := packet{line: ln}
+			_, leng := pckt.val()
+			readLen += leng + 6
+			readCount++
+			res = append(res, pckt)
+			if readLen >= expectedLen {
+				break
+			}
+		}
+	} else {
+		payload := p.read_rest_str(18)
+		expectedCount := p.payloadCount()
+		for {
+			ln := payload[readLen:]
+			// fmt.Printf("\nStarting %d", readLen)
+			pckt := packet{line: ln}
+			// fmt.Printf("\nReading ln %s, ver: %d, id: %d", ln, pckt.version(), pckt.id())
+			_, leng := pckt.val()
+			readLen += leng + 6
+			readCount++
+			res = append(res, pckt)
+			if takeCount && readCount == expectedCount {
+				break
+			}
+		}
+	}
+
+	return res
+}
+
+func (p *packet) val() (int, int) {
+	length := 0
+	start := 6
+	s := ""
+	for {
+		segment := p.read_str(start, 5)
+		length += 5
+		start += 5
+		s += segment[1:]
+		if string(segment[0]) == "0" {
+			break
+		}
+	}
+
+	return bin2dig(s), length
 }
 
 func run(fname string) {
@@ -99,10 +169,7 @@ func run(fname string) {
 
 	pck := packet{line: decode(ln)}
 
-	fmt.Println()
 	fmt.Println(pck)
-	fmt.Println(pck.version())
-	fmt.Println(pck.id())
 
 	errCheck(scanner.Err())
 }
