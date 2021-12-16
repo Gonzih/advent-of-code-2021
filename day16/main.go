@@ -99,11 +99,11 @@ func (p *packet) totalLen() int {
 	} else if p.ltid() == 0 {
 		return 22 + p.payloadLen()
 	} else {
-		// l := 18
-		// for _, subp := range p.subPackets() {
-		// 	l += subp.totalLen()
-		// }
-		return 99999999
+		l := 18
+		for _, subp := range p.subPackets() {
+			l += subp.totalLen()
+		}
+		return l
 	}
 }
 
@@ -142,6 +142,8 @@ func (p *packet) subPackets() []packet {
 			if pckt.id() == 4 {
 				_, leng := pckt.val()
 				readLen += leng + 6
+			} else {
+				readLen += pckt.totalLen()
 			}
 			readCount++
 			res = append(res, pckt)

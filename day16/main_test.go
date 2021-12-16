@@ -77,17 +77,16 @@ func TestPacketThreeSumVersionsOne(t *testing.T) {
 	assert.Equal(t, 16, p.sumVersions())
 }
 
-// func TestPacketThreeSumVersionsTwo(t *testing.T) {
-// 	p := packet{line: decode("620080001611562C8802118E34")}
-// 	assert.Equal(t, 3, p.version())
-// 	assert.Equal(t, 0, p.id())
-// 	assert.Equal(t, 12, p.sumVersions())
-// }
+func TestPacketThreeSumVersionsTwo(t *testing.T) {
+	p := packet{line: decode("620080001611562C8802118E34")}
+	assert.Equal(t, 3, p.version())
+	assert.Equal(t, 0, p.id())
+	assert.Equal(t, 12, p.sumVersions())
+}
 
 // func TestPacketThreeSumVersionsThree(t *testing.T) {
 // 	p := packet{line: decode("C0015000016115A2E0802F182340")}
-// 	assert.Equal(t, 2, p.id())
-// 	assert.Equal(t, 16, p.sumVersions())
+// 	assert.Equal(t, 23, p.sumVersions())
 // }
 
 // func TestPacketThreeSumVersionsFour(t *testing.T) {
