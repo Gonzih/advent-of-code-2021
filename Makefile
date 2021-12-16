@@ -7,7 +7,7 @@ RS_TASKS = $(patsubst %,day%,$(RS_DAYS))
 $(PY_TASKS):
 	cd $@ && mypy main.py && python3.10 main.py
 $(RS_TASKS):
-	cd $@ && cargo test && cargo run --release
+	cd $@ && cargo test && cargo build --release && ./target/release/aoc
 all: $(PY_TASKS) $(RS_TASKS)
 
 deps:
