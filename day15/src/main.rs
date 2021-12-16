@@ -107,7 +107,7 @@ impl Path {
 
     fn neighbours(&self, point: Point) -> Vec<Node> {
         let (ox, oy) = point;
-        let points: Vec<(i32, i32)> = vec![(1, 0), (0, 1)];
+        let points: Vec<(i32, i32)> = vec![(1, 0), (0, 1), (-1, 0), (0, -1)];
 
         let mut result = vec![];
 

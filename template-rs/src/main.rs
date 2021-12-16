@@ -1,36 +1,27 @@
-use std::io::Result;
-
 #[derive(Debug)]
-struct Line {
-    line: &'static str,
-}
+struct State {}
 
-impl Line {
-    fn new(line: &'static str) -> Line {
-        Line { line }
+impl State {
+    fn new() -> State {
+        State {}
     }
 }
 
-impl Line {
-    fn process(&self) -> Result<()> {
-        println!("{}", self.line);
-        Ok(())
+impl State {
+    fn process(&self, line: &'static str) {
+        println!("{}", line);
     }
 }
 
-fn run(input: &'static str) -> Result<()> {
-    input
-        .lines()
-        .map(|line| Line::new(line).process())
-        .collect()
+fn run(input: &'static str) {
+    let state = State::new();
+    input.lines().for_each(|line| state.process(line));
 }
 
-fn main() -> Result<()> {
+fn main() {
     let test_input = include_str!("test-input.txt");
     let input = include_str!("input.txt");
 
-    run(test_input)?;
-    run(input)?;
-
-    Ok(())
+    run(test_input);
+    run(input);
 }
