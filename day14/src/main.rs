@@ -210,7 +210,7 @@ mod tests {
         test_input_for("NBCCNBBBCBHCB", &polymer);
 
         polymer.tick();
-        polymer.print();
+        // polymer.print();
         test_input_for("NBBBCNCCNBBNBNBBCHBHHBCHB", &polymer);
 
         polymer.tick();
