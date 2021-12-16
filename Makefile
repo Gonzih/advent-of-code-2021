@@ -1,5 +1,5 @@
 PY_DAYS = $(shell seq 1 1 10)
-RS_DAYS = $(shell seq 11 1 14)
+RS_DAYS = $(shell seq 11 1 15)
 PY_TASKS = $(patsubst %,day%,$(PY_DAYS))
 RS_TASKS = $(patsubst %,day%,$(RS_DAYS))
 
