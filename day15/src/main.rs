@@ -199,6 +199,7 @@ fn run(input: &'static str, v: usize) {
     input.lines().for_each(|line| p.process(line));
     p.expand_map();
     p.reset_cache((0, 0));
+    p.print();
     let cheapest = p.cheapest_path((0, 0), (p.width() - 1, p.height() - 1));
     println!("Cheapest path {}", cheapest);
     assert_eq!(cheapest, v);
