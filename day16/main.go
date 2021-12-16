@@ -92,6 +92,21 @@ func (p *packet) sumVersions() int {
 	return sum
 }
 
+func (p *packet) totalLen() int {
+	if p.id() == 4 {
+		_, leng := p.val()
+		return 6 + leng
+	} else if p.ltid() == 0 {
+		return 22 + p.payloadLen()
+	} else {
+		// l := 18
+		// for _, subp := range p.subPackets() {
+		// 	l += subp.totalLen()
+		// }
+		return 99999999
+	}
+}
+
 func (p *packet) subPackets() []packet {
 	var res []packet = make([]packet, 0)
 	if p.id() == 4 {
@@ -124,8 +139,10 @@ func (p *packet) subPackets() []packet {
 			// fmt.Printf("\nStarting %d", readLen)
 			pckt := packet{line: ln}
 			// fmt.Printf("\nReading ln %s, ver: %d, id: %d", ln, pckt.version(), pckt.id())
-			_, leng := pckt.val()
-			readLen += leng + 6
+			if pckt.id() == 4 {
+				_, leng := pckt.val()
+				readLen += leng + 6
+			}
 			readCount++
 			res = append(res, pckt)
 			if takeCount && readCount == expectedCount {
