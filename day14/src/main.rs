@@ -49,13 +49,13 @@ impl Polymer {
     }
 
     fn ins(&mut self, pairs: &mut HashMap<String, usize>, pair: String, v: usize) {
-        println!("Inserting {}", pair);
+        // println!("Inserting {}", pair);
         let entry = pairs.entry(pair).or_insert(0);
         *entry += v;
     }
 
     fn rem(&mut self, pairs: &mut HashMap<String, usize>, pair: String, v: usize) {
-        println!("Removing {}", pair);
+        // println!("Removing {}", pair);
         let entry = pairs.entry(pair).or_insert(0);
         if *entry > 0 {
             *entry -= v;
@@ -142,7 +142,7 @@ fn main() -> Result<()> {
     let input = include_str!("input.txt");
 
     assert_eq!(run(input, 10), 2223);
-    assert_eq!(run(input, 40), 1);
+    assert_eq!(run(input, 40), 2566282754493);
 
     Ok(())
 }
