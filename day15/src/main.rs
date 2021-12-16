@@ -214,7 +214,8 @@ fn main() -> Result<()> {
     // run(input, 619);
 
     run(test_input, 315);
-    run(input, 619);
+    // speed this up
+    // run(input, 2922);
 
     Ok(())
 }
