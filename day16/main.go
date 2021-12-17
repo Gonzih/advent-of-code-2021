@@ -53,16 +53,16 @@ type packet struct {
 	line string
 }
 
-func (p *packet) read_rest_str(start int) string {
+func (p *packet) readRestStr(start int) string {
 	return p.line[start:]
 }
 
-func (p *packet) read_str(start int, leng int) string {
+func (p *packet) readStr(start int, leng int) string {
 	return p.line[start:(start + leng)]
 }
 
 func (p *packet) read(start int, leng int) int {
-	return bin2dig(p.read_str(start, leng))
+	return bin2dig(p.readStr(start, leng))
 }
 func (p *packet) version() int {
 	return p.read(0, 3)
@@ -118,7 +118,7 @@ func (p *packet) subPackets() []packet {
 	readCount := 0
 
 	if !takeCount {
-		payload := p.read_str(22, p.payloadLen())
+		payload := p.readStr(22, p.payloadLen())
 		expectedLen := p.payloadLen()
 		for {
 			ln := payload[readLen:]
@@ -132,7 +132,7 @@ func (p *packet) subPackets() []packet {
 			}
 		}
 	} else {
-		payload := p.read_rest_str(18)
+		payload := p.readRestStr(18)
 		expectedCount := p.payloadCount()
 		for {
 			ln := payload[readLen:]
@@ -161,7 +161,7 @@ func (p *packet) val() (int, int) {
 	start := 6
 	s := ""
 	for {
-		segment := p.read_str(start, 5)
+		segment := p.readStr(start, 5)
 		length += 5
 		start += 5
 		s += segment[1:]
